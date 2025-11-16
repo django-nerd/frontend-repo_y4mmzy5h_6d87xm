@@ -189,7 +189,7 @@ function ControlPanel() {
         <div className="text-sm text-slate-600 mb-2">Status</div>
         <div className="flex items-center gap-2">
           <div
-            className={`size-2.5 rounded-full ${running ? 'bg-green-500' : 'bg-slate-300'}`}
+            className={`size-2.5 rounded-full bg-green-500`}
           />
           <span className="text-sm font-medium text-slate-800">Ready</span>
         </div>
