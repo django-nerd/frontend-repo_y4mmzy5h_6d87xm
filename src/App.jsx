@@ -1,6 +1,8 @@
-import { useMemo, useState } from 'react'
-import { Play, Square, Server, Activity, Monitor, CheckCircle2, Clock } from 'lucide-react'
+import { useEffect, useMemo, useState } from 'react'
+import { Play, Square, Server, Activity, Monitor, CheckCircle2, Clock, Download } from 'lucide-react'
 import Spline from '@splinetool/react-spline'
+
+const API_BASE = import.meta.env.VITE_BACKEND_URL || ''
 
 function HeaderHero() {
   return (
@@ -22,42 +24,75 @@ function HeaderHero() {
 }
 
 function WorklistTable() {
-  const rows = useMemo(
-    () => [
-      {
-        name: 'Budi Santoso',
-        id: 'PID-001245',
-        modality: 'CT',
-        study: 'Head CT w/ Contrast',
-        accession: 'ACC-2025-0001',
-        status: 'Scheduled',
-      },
-      {
-        name: 'Siti Aminah',
-        id: 'PID-001246',
-        modality: 'MR',
-        study: 'Brain MRI',
-        accession: 'ACC-2025-0002',
-        status: 'In Progress',
-      },
-      {
-        name: 'Andi Wijaya',
-        id: 'PID-001247',
-        modality: 'CR',
-        study: 'Chest X-Ray',
-        accession: 'ACC-2025-0003',
-        status: 'Completed',
-      },
-    ],
-    []
-  )
+  const [rows, setRows] = useState(() => [
+    {
+      name: 'Budi Santoso',
+      id: 'PID-001245',
+      modality: 'CT',
+      study: 'Head CT w/ Contrast',
+      accession: 'ACC-2025-0001',
+      status: 'Scheduled',
+    },
+    {
+      name: 'Siti Aminah',
+      id: 'PID-001246',
+      modality: 'MR',
+      study: 'Brain MRI',
+      accession: 'ACC-2025-0002',
+      status: 'In Progress',
+    },
+    {
+      name: 'Andi Wijaya',
+      id: 'PID-001247',
+      modality: 'CR',
+      study: 'Chest X-Ray',
+      accession: 'ACC-2025-0003',
+      status: 'Completed',
+    },
+  ])
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+
+  const getWorklist = async () => {
+    try {
+      setLoading(true)
+      setError('')
+      const res = await fetch(`${API_BASE}/api/worklist`)
+      if (!res.ok) throw new Error('Gagal mengambil worklist')
+      const data = await res.json()
+      setRows(Array.isArray(data) ? data : [])
+    } catch (e) {
+      setError(e.message || 'Terjadi kesalahan')
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-      <div className="px-4 py-3 border-b border-slate-200 flex items-center gap-2">
-        <Server className="w-4 h-4 text-slate-600" />
-        <span className="font-semibold text-slate-700">Worklist</span>
+      <div className="px-4 py-3 border-b border-slate-200 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <Server className="w-4 h-4 text-slate-600" />
+          <span className="font-semibold text-slate-700">Worklist</span>
+        </div>
+        <button
+          onClick={getWorklist}
+          className={`inline-flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm font-medium border transition-colors ${
+            loading
+              ? 'bg-slate-50 text-slate-400 border-slate-200 cursor-wait'
+              : 'bg-blue-600 text-white border-blue-600 hover:bg-blue-700'
+          }`}
+          disabled={loading}
+        >
+          <Download className="w-4 h-4" />
+          {loading ? 'Mengambil...' : 'Get Worklist'}
+        </button>
       </div>
+      {error && (
+        <div className="px-4 py-2 text-sm text-red-600 bg-red-50 border-b border-red-200">
+          {error}
+        </div>
+      )}
       <div className="overflow-x-auto">
         <table className="min-w-full text-sm">
           <thead className="bg-slate-50 text-slate-600">
