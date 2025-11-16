@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Play, Square, Server, Activity, Monitor, CheckCircle2, Clock, Download } from 'lucide-react'
+import { Scan, XCircle, Server, Activity, Monitor, CheckCircle2, Clock, Download } from 'lucide-react'
 import Spline from '@splinetool/react-spline'
 
 const API_BASE = import.meta.env.VITE_BACKEND_URL || ''
@@ -171,7 +171,7 @@ function ControlPanel() {
           }`}
           disabled={running}
         >
-          <Play className="w-4 h-4" /> Start Server
+          <Scan className="w-4 h-4" /> Scan
         </button>
         <button
           onClick={() => setRunning(false)}
@@ -182,7 +182,7 @@ function ControlPanel() {
           }`}
           disabled={!running}
         >
-          <Square className="w-4 h-4" /> Stop Server
+          <XCircle className="w-4 h-4" /> Cancel
         </button>
       </div>
 
