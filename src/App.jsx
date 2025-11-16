@@ -147,7 +147,6 @@ function WorklistTable() {
 
 function ControlPanel() {
   const [running, setRunning] = useState(false)
-  const [sent, setSent] = useState(0)
 
   return (
     <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-5 space-y-5">
@@ -188,29 +187,11 @@ function ControlPanel() {
 
       <div className="rounded-lg border border-slate-200 p-4 bg-slate-50">
         <div className="text-sm text-slate-600 mb-2">Status</div>
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div
-              className={`size-2.5 rounded-full ${running ? 'bg-green-500' : 'bg-slate-300'}`}
-            />
-            <span className="text-sm font-medium text-slate-800">
-              {running ? 'Server berjalan' : 'Server berhenti'}
-            </span>
-          </div>
-          <button
-            onClick={() => running && setSent((s) => s + 1)}
-            className={`text-xs rounded-md px-2 py-1 border transition-colors ${
-              running
-                ? 'bg-blue-600 text-white border-blue-600 hover:bg-blue-700'
-                : 'bg-white text-slate-400 border-slate-200 cursor-not-allowed'
-            }`}
-            disabled={!running}
-          >
-            Kirim 1 Gambar ke PACS
-          </button>
-        </div>
-        <div className="mt-3 text-sm text-slate-700">
-          Gambar terkirim ke PACS: <span className="font-semibold">{sent}</span>
+        <div className="flex items-center gap-2">
+          <div
+            className={`size-2.5 rounded-full ${running ? 'bg-green-500' : 'bg-slate-300'}`}
+          />
+          <span className="text-sm font-medium text-slate-800">Ready</span>
         </div>
       </div>
 
@@ -220,12 +201,7 @@ function ControlPanel() {
         </div>
         <div className="max-h-40 overflow-auto p-3 text-xs text-slate-600 space-y-1">
           <div>[INFO] Emulator siap digunakan.</div>
-          <div>
-            {running ? '[RUNNING] Menunggu studi untuk dikirim...' : '[STOPPED] Server tidak aktif.'}
-          </div>
-          {sent > 0 && (
-            <div>[OK] {sent} gambar berhasil dikirim ke PACS.</div>
-          )}
+          {running && <div>[RUNNING] Menunggu studi untuk dikirim...</div>}
         </div>
       </div>
     </div>
